@@ -7,9 +7,10 @@ interface MazeGameProps {
   timeRemaining: number;
   onComplete: () => void;
   currentLevel: number;
+  onExit: () => void;
 }
 
-export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, currentLevel }: MazeGameProps) {
+export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, currentLevel, onExit }: MazeGameProps) {
   const [playerPos, setPlayerPos] = useState<Position>({ x: 0, y: 0 });
   const goalPos: Position = { x: mazeSize - 1, y: mazeSize - 1 };
 
@@ -66,6 +67,40 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const movePlayer = (direction: 'up' | 'down' | 'left' | 'right') => {
+    const { x, y } = playerPos;
+    let newPos = { ...playerPos };
+
+    switch (direction) {
+      case 'up':
+        if (!maze[y][x].walls.top && y > 0) {
+          newPos = { x, y: y - 1 };
+        }
+        break;
+      case 'down':
+        if (!maze[y][x].walls.bottom && y < mazeSize - 1) {
+          newPos = { x, y: y + 1 };
+        }
+        break;
+      case 'left':
+        if (!maze[y][x].walls.left && x > 0) {
+          newPos = { x: x - 1, y };
+        }
+        break;
+      case 'right':
+        if (!maze[y][x].walls.right && x < mazeSize - 1) {
+          newPos = { x: x + 1, y };
+        }
+        break;
+    }
+
+    setPlayerPos(newPos);
+
+    if (newPos.x === goalPos.x && newPos.y === goalPos.y) {
+      setTimeout(onComplete, 300);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#2d5a6e] to-[#1a3a4a] flex flex-col items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -85,15 +120,24 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
         ))}
       </div>
 
-      <div className="relative z-10 mb-6 text-center">
-        <h1 className="text-5xl font-bold text-[#f5e6d3] mb-2 tracking-wider">
-          CHRISTMAS MASHUP
-        </h1>
-        <div className="flex items-center justify-center gap-8 text-2xl text-white">
-          <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl font-bold">
+      <div className="relative z-10 mb-6 w-full">
+        <div className="flex justify-between items-start mb-4 px-4">
+          <button
+            onClick={onExit}
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105"
+          >
+            Вихід
+          </button>
+          <h1 className="text-4xl md:text-5xl font-bold text-[#f5e6d3] tracking-wider">
+            CHRISTMAS MASHUP
+          </h1>
+          <div />
+        </div>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-lg sm:text-2xl text-white px-4">
+          <div className="bg-white/20 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold">
             Рівень: {currentLevel}
           </div>
-          <div className={`bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl font-bold ${timeRemaining < 60 ? 'text-red-400 animate-pulse' : ''}`}>
+          <div className={`bg-white/20 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold ${timeRemaining < 60 ? 'text-red-400 animate-pulse' : ''}`}>
             Час: {formatTime(timeRemaining)}
           </div>
         </div>
@@ -201,9 +245,45 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
         <div className="absolute bottom-2 right-2 text-4xl">🎁</div>
       </div>
 
-      <div className="relative z-10 mt-6 text-center text-white text-lg bg-white/20 backdrop-blur-sm px-8 py-4 rounded-xl">
-        <p className="font-semibold">Використовуйте стрілки для руху</p>
-        <p className="text-sm opacity-80 mt-1">Доведіть імбирне печиво до ялинки!</p>
+      <div className="relative z-10 mt-6 w-full flex flex-col items-center gap-4">
+        <div className="text-center text-white text-sm sm:text-lg bg-white/20 backdrop-blur-sm px-4 sm:px-8 py-3 sm:py-4 rounded-xl">
+          <p className="font-semibold">Використовуйте стрілки для руху</p>
+          <p className="text-xs sm:text-sm opacity-80 mt-1">Доведіть імбирне печиво до ялинки!</p>
+        </div>
+
+        <div className="flex gap-2 md:gap-4 justify-center flex-wrap px-4">
+          <button
+            onMouseDown={() => movePlayer('up')}
+            onTouchStart={() => movePlayer('up')}
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+          >
+            ⬆️
+          </button>
+        </div>
+
+        <div className="flex gap-2 md:gap-4 justify-center px-4">
+          <button
+            onMouseDown={() => movePlayer('left')}
+            onTouchStart={() => movePlayer('left')}
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+          >
+            ⬅️
+          </button>
+          <button
+            onMouseDown={() => movePlayer('down')}
+            onTouchStart={() => movePlayer('down')}
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+          >
+            ⬇️
+          </button>
+          <button
+            onMouseDown={() => movePlayer('right')}
+            onTouchStart={() => movePlayer('right')}
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+          >
+            ➡️
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -108,6 +108,7 @@ function App() {
           timeRemaining={timeRemaining}
           onComplete={handleLevelComplete}
           currentLevel={currentLevel}
+          onExit={goToMenu}
         />
       )}
 
