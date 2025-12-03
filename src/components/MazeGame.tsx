@@ -12,9 +12,26 @@ interface MazeGameProps {
 
 export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, currentLevel, onExit }: MazeGameProps) {
   const [playerPos, setPlayerPos] = useState<Position>({ x: 0, y: 0 });
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
   const goalPos: Position = { x: mazeSize - 1, y: mazeSize - 1 };
 
-  const cellSize = Math.min(600 / mazeSize, 40);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const getOptimalCellSize = () => {
+    const maxWidth = windowSize.width - 32;
+    const maxHeight = windowSize.height - 280;
+    const availableSize = Math.min(maxWidth, maxHeight);
+    const calculatedCellSize = Math.floor(availableSize / mazeSize);
+    return Math.max(10, calculatedCellSize);
+  };
+
+  const cellSize = getOptimalCellSize();
   const mazeWidth = cellSize * mazeSize;
   const mazeHeight = cellSize * mazeSize;
 
@@ -102,7 +119,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2d5a6e] to-[#1a3a4a] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="w-screen h-screen bg-gradient-to-b from-[#2d5a6e] to-[#1a3a4a] flex flex-col items-center justify-between p-2 sm:p-4 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(30)].map((_, i) => (
           <div
@@ -120,34 +137,34 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
         ))}
       </div>
 
-      <div className="relative z-10 mb-6 w-full">
-        <div className="flex justify-between items-start mb-4 px-4">
+      <div className="relative z-10 w-full flex-shrink-0">
+        <div className="flex justify-between items-start mb-2 px-2 sm:px-4 gap-2">
           <button
             onClick={onExit}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105"
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-xs sm:text-base"
           >
             Вихід
           </button>
-          <h1 className="text-4xl md:text-5xl font-bold text-[#f5e6d3] tracking-wider">
+          <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-[#f5e6d3] tracking-wider text-center flex-1">
             CHRISTMAS MASHUP
           </h1>
           <div />
         </div>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-lg sm:text-2xl text-white px-4">
-          <div className="bg-white/20 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm md:text-lg text-white px-2 sm:px-4">
+          <div className="bg-white/20 backdrop-blur-sm px-2 sm:px-4 py-1 sm:py-2 rounded-xl font-bold">
             Рівень: {currentLevel}
           </div>
-          <div className={`bg-white/20 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold ${timeRemaining < 60 ? 'text-red-400 animate-pulse' : ''}`}>
+          <div className={`bg-white/20 backdrop-blur-sm px-2 sm:px-4 py-1 sm:py-2 rounded-xl font-bold ${timeRemaining < 60 ? 'text-red-400 animate-pulse' : ''}`}>
             Час: {formatTime(timeRemaining)}
           </div>
         </div>
       </div>
 
       <div
-        className="relative bg-white/10 backdrop-blur-sm p-8 rounded-3xl shadow-2xl"
+        className="relative bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl flex-1 flex items-center justify-center overflow-auto"
         style={{
-          width: mazeWidth + 64,
-          height: mazeHeight + 64
+          maxWidth: '100vw',
+          maxHeight: 'calc(100vh - 180px)'
         }}
       >
         <svg
@@ -239,47 +256,42 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
           </text>
         </svg>
 
-        <div className="absolute top-2 left-2 text-4xl">🎁</div>
-        <div className="absolute top-2 right-2 text-4xl">🍬</div>
-        <div className="absolute bottom-2 left-2 text-4xl">⭐</div>
-        <div className="absolute bottom-2 right-2 text-4xl">🎁</div>
       </div>
 
-      <div className="relative z-10 mt-6 w-full flex flex-col items-center gap-4">
-        <div className="text-center text-white text-sm sm:text-lg bg-white/20 backdrop-blur-sm px-4 sm:px-8 py-3 sm:py-4 rounded-xl">
-          <p className="font-semibold">Використовуйте стрілки для руху</p>
-          <p className="text-xs sm:text-sm opacity-80 mt-1">Доведіть імбирне печиво до ялинки!</p>
+      <div className="relative z-10 w-full flex-shrink-0 flex flex-col items-center gap-2 p-2 sm:p-4">
+        <div className="text-center text-white text-xs sm:text-sm md:text-base bg-white/20 backdrop-blur-sm px-2 sm:px-4 py-2 rounded-lg">
+          <p className="font-semibold">Використовуйте стрілки</p>
         </div>
 
-        <div className="flex gap-2 md:gap-4 justify-center flex-wrap px-4">
+        <div className="flex gap-1 sm:gap-2 justify-center flex-wrap">
           <button
             onMouseDown={() => movePlayer('up')}
             onTouchStart={() => movePlayer('up')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
           >
             ⬆️
           </button>
         </div>
 
-        <div className="flex gap-2 md:gap-4 justify-center px-4">
+        <div className="flex gap-1 sm:gap-2 justify-center">
           <button
             onMouseDown={() => movePlayer('left')}
             onTouchStart={() => movePlayer('left')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
           >
             ⬅️
           </button>
           <button
             onMouseDown={() => movePlayer('down')}
             onTouchStart={() => movePlayer('down')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
           >
             ⬇️
           </button>
           <button
             onMouseDown={() => movePlayer('right')}
             onTouchStart={() => movePlayer('right')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95"
+            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
           >
             ➡️
           </button>
