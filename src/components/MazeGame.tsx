@@ -24,8 +24,8 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
   }, []);
 
   const getOptimalCellSize = () => {
-    const maxWidth = windowSize.width - 32;
-    const maxHeight = windowSize.height - 280;
+    const maxWidth = windowSize.width - 16;
+    const maxHeight = windowSize.height - 120;
     const availableSize = Math.min(maxWidth, maxHeight);
     const calculatedCellSize = Math.floor(availableSize / mazeSize);
     return Math.max(10, calculatedCellSize);
@@ -119,7 +119,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
   };
 
   return (
-    <div className="w-screen h-screen bg-gradient-to-b from-[#2d5a6e] to-[#1a3a4a] flex flex-col items-center justify-between p-2 sm:p-4 relative overflow-hidden">
+    <div className="w-screen h-screen bg-gradient-to-b from-[#2d5a6e] to-[#1a3a4a] flex flex-col items-center p-2 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(30)].map((_, i) => (
           <div
@@ -137,34 +137,23 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
         ))}
       </div>
 
-      <div className="relative z-10 w-full flex-shrink-0">
-        <div className="flex justify-between items-start mb-2 px-2 sm:px-4 gap-2">
-          <button
-            onClick={onExit}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-xs sm:text-base"
-          >
-            Вихід
-          </button>
-          <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-[#f5e6d3] tracking-wider text-center flex-1">
-            CHRISTMAS MASHUP
-          </h1>
-          <div />
+      <h1 className="relative z-10 text-3xl sm:text-4xl md:text-5xl font-bold text-[#f5e6d3] tracking-widest text-center mb-1 drop-shadow-lg">
+        CHRISTMAS MASHUP
+      </h1>
+
+      <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-xs sm:text-sm md:text-base text-white mb-2">
+        <div className="bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg font-bold">
+          Рівень: {currentLevel}
         </div>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm md:text-lg text-white px-2 sm:px-4">
-          <div className="bg-white/20 backdrop-blur-sm px-2 sm:px-4 py-1 sm:py-2 rounded-xl font-bold">
-            Рівень: {currentLevel}
-          </div>
-          <div className={`bg-white/20 backdrop-blur-sm px-2 sm:px-4 py-1 sm:py-2 rounded-xl font-bold ${timeRemaining < 60 ? 'text-red-400 animate-pulse' : ''}`}>
-            Час: {formatTime(timeRemaining)}
-          </div>
+        <div className={`bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg font-bold ${timeRemaining < 60 ? 'text-red-400 animate-pulse' : ''}`}>
+          Час: {formatTime(timeRemaining)}
         </div>
       </div>
 
       <div
-        className="relative bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl flex-1 flex items-center justify-center overflow-auto"
+        className="relative bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl flex-1 flex items-center justify-center overflow-auto w-full"
         style={{
-          maxWidth: '100vw',
-          maxHeight: 'calc(100vh - 180px)'
+          maxHeight: 'calc(100vh - 100px)'
         }}
       >
         <svg
@@ -258,44 +247,51 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
 
       </div>
 
-      <div className="relative z-10 w-full flex-shrink-0 flex flex-col items-center gap-2 p-2 sm:p-4">
-        <div className="text-center text-white text-xs sm:text-sm md:text-base bg-white/20 backdrop-blur-sm px-2 sm:px-4 py-2 rounded-lg">
-          <p className="font-semibold">Використовуйте стрілки</p>
+      <div className="relative z-10 w-full flex-shrink-0 flex justify-between items-end gap-2 p-1 mt-1">
+        <div className="flex gap-1 items-end">
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-1 justify-center">
+              <button
+                onMouseDown={() => movePlayer('up')}
+                onTouchStart={() => movePlayer('up')}
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+              >
+                ⬆️
+              </button>
+            </div>
+            <div className="flex gap-1 justify-center">
+              <button
+                onMouseDown={() => movePlayer('left')}
+                onTouchStart={() => movePlayer('left')}
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+              >
+                ⬅️
+              </button>
+              <button
+                onMouseDown={() => movePlayer('down')}
+                onTouchStart={() => movePlayer('down')}
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+              >
+                ⬇️
+              </button>
+              <button
+                onMouseDown={() => movePlayer('right')}
+                onTouchStart={() => movePlayer('right')}
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+              >
+                ➡️
+              </button>
+            </div>
+          </div>
+          <p className="text-white text-xs opacity-80 pb-1">Made in Bolt</p>
         </div>
 
-        <div className="flex gap-1 sm:gap-2 justify-center flex-wrap">
-          <button
-            onMouseDown={() => movePlayer('up')}
-            onTouchStart={() => movePlayer('up')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
-          >
-            ⬆️
-          </button>
-        </div>
-
-        <div className="flex gap-1 sm:gap-2 justify-center">
-          <button
-            onMouseDown={() => movePlayer('left')}
-            onTouchStart={() => movePlayer('left')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
-          >
-            ⬅️
-          </button>
-          <button
-            onMouseDown={() => movePlayer('down')}
-            onTouchStart={() => movePlayer('down')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
-          >
-            ⬇️
-          </button>
-          <button
-            onMouseDown={() => movePlayer('right')}
-            onTouchStart={() => movePlayer('right')}
-            className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-2 px-2 sm:py-3 sm:px-4 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-sm sm:text-base"
-          >
-            ➡️
-          </button>
-        </div>
+        <button
+          onClick={onExit}
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-xs sm:text-sm"
+        >
+          Вихід
+        </button>
       </div>
     </div>
   );
