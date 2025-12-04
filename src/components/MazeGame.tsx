@@ -283,7 +283,6 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
               </button>
             </div>
           </div>
-          <p className="text-white text-xs opacity-80 pb-1">Made in Bolt</p>
         </div>
 
         <button
