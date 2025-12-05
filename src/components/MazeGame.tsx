@@ -24,11 +24,24 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
   }, []);
 
   const getOptimalCellSize = () => {
-    const maxWidth = windowSize.width - 16;
-    const maxHeight = windowSize.height - 120;
-    const availableSize = Math.min(maxWidth, maxHeight);
+    // Враховуємо всі елементи інтерфейсу
+    const headerHeight = 120; // заголовок + інфо
+    const controlsHeight = 80; // кнопки керування
+    const padding = 32; // відступи
+    
+    const maxWidth = windowSize.width - padding;
+    const maxHeight = windowSize.height - headerHeight - controlsHeight;
+    
+    // Для desktop обмежуємо максимальний розмір
+    const effectiveWidth = Math.min(maxWidth, 1200); // Максимум 1200px ширина
+    const effectiveHeight = Math.min(maxHeight, 800); // Максимум 800px висота
+    
+    // Вибираємо менший розмір для квадратного лабіринту
+    const availableSize = Math.min(effectiveWidth, effectiveHeight);
     const calculatedCellSize = Math.floor(availableSize / mazeSize);
-    return Math.max(10, calculatedCellSize);
+    
+    // Мінімум 15px на клітинку, максимум 50px для кращого відображення
+    return Math.min(Math.max(15, calculatedCellSize), 50);
   };
 
   const cellSize = getOptimalCellSize();
@@ -151,15 +164,22 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
       </div>
 
       <div
-        className="relative bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl flex-1 flex items-center justify-center overflow-auto w-full"
+        className="relative bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl flex-1 flex items-center justify-center p-4 w-full"
         style={{
-          maxHeight: 'calc(100vh - 100px)'
+          maxHeight: 'calc(100vh - 180px)',
+          maxWidth: '1200px',
+          margin: '0 auto'
         }}
       >
         <svg
           width={mazeWidth}
           height={mazeHeight}
           className="mx-auto"
+          style={{
+            maxWidth: '100%',
+            maxHeight: '100%',
+            display: 'block'
+          }}
         >
           {maze.map((row, y) =>
             row.map((cell, x) => (
