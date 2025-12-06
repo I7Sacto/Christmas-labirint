@@ -45,8 +45,8 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
   };
 
   const cellSize = getOptimalCellSize();
-  const mazeWidth = cellSize * mazeSize;
-  const mazeHeight = cellSize * mazeSize;
+  const mazeWidth = cellSize * mazeSize + 6;  // +6px для strokeWidth
+  const mazeHeight = cellSize * mazeSize + 6;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -174,6 +174,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
         <svg
           width={mazeWidth}
           height={mazeHeight}
+          viewBox={`-3 -3 ${mazeWidth} ${mazeHeight}`}
           className="mx-auto"
           style={{
             maxWidth: '100%',
