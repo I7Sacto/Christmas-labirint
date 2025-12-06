@@ -132,7 +132,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
   };
 
   return (
-    <div className="w-screen h-screen bg-gradient-to-b from-[#2d5a6e] to-[#1a3a4a] flex flex-col items-center p-2 relative overflow-hidden">
+    <div className="w-screen h-screen bg-gradient-to-b from-[#2d5a6e] to-[#1a3a4a] flex flex-col items-center p-1 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(30)].map((_, i) => (
           <div
@@ -164,7 +164,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
       </div>
 
       <div
-        className="relative bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl flex-1 flex items-center justify-center p-4 w-full"
+        className="relative bg-white/10 backdrop-blur-sm rounded-xl shadow-2xl flex-1 flex items-center justify-center overflow-hidden w-full mx-1"
         style={{
           maxHeight: 'calc(100vh - 180px)',
           maxWidth: '1200px',
@@ -274,7 +274,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
               <button
                 onMouseDown={() => movePlayer('up')}
                 onTouchStart={() => movePlayer('up')}
-                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-5 sm:py-4 sm:px-6 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-lg sm:text-xl"
               >
                 ⬆️
               </button>
@@ -283,21 +283,21 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
               <button
                 onMouseDown={() => movePlayer('left')}
                 onTouchStart={() => movePlayer('left')}
-                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-5 sm:py-4 sm:px-6 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-lg sm:text-xl"
               >
                 ⬅️
               </button>
               <button
                 onMouseDown={() => movePlayer('down')}
                 onTouchStart={() => movePlayer('down')}
-                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-5 sm:py-4 sm:px-6 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-lg sm:text-xl"
               >
                 ⬇️
               </button>
               <button
                 onMouseDown={() => movePlayer('right')}
                 onTouchStart={() => movePlayer('right')}
-                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-1 px-2 sm:py-2 sm:px-3 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-xs sm:text-sm"
+                className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold py-3 px-5 sm:py-4 sm:px-6 rounded-lg transition-all duration-150 transform hover:scale-110 active:scale-95 text-lg sm:text-xl"
               >
                 ➡️
               </button>
@@ -307,7 +307,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
 
         <button
           onClick={onExit}
-          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-xs sm:text-sm"
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-lg transition-all duration-200 transform hover:scale-105 text-base sm:text-lg"
         >
           Вихід
         </button>
