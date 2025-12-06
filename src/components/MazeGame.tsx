@@ -26,7 +26,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
   const getOptimalCellSize = () => {
     // Враховуємо всі елементи інтерфейсу
     const headerHeight = 120; // заголовок + інфо
-    const controlsHeight = 80; // кнопки керування
+    const controlsHeight = 140; // кнопки керування
     const padding = 32; // відступи
     
     const maxWidth = windowSize.width - padding;
@@ -166,7 +166,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
       <div
         className="relative bg-white/10 backdrop-blur-sm rounded-xl shadow-2xl flex-1 flex items-center justify-center overflow-hidden w-full mx-1"
         style={{
-          maxHeight: 'calc(100vh - 180px)',
+          maxHeight: 'calc(100vh - 240px)',
           maxWidth: '1200px',
           margin: '0 auto'
         }}
