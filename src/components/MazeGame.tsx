@@ -166,7 +166,7 @@ export default function MazeGame({ maze, mazeSize, timeRemaining, onComplete, cu
       <div
         className="relative bg-white/10 backdrop-blur-sm rounded-xl shadow-2xl flex-1 flex items-center justify-center overflow-hidden w-full mx-1"
         style={{
-          maxHeight: 'calc(100vh - 240px)',
+          maxHeight: windowSize.width < 640 ? 'calc(100vh - 220px)' : 'calc(100vh - 280px)',
           maxWidth: '1200px',
           margin: '0 auto'
         }}
